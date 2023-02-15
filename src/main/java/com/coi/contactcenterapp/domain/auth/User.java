@@ -1,5 +1,9 @@
-package com.coi.contactcenterapp.domain;
+package com.coi.contactcenterapp.domain.auth;
 
+import com.coi.contactcenterapp.domain.Employee;
+import com.coi.contactcenterapp.domain.common.AbstractEntity;
+import com.coi.contactcenterapp.domain.common.IntegerId;
+import com.coi.contactcenterapp.domain.common.StringId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,23 +14,17 @@ import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter @Setter
 @Entity
 @Table(name="user_data")
-public class User {
+public class User extends AbstractEntity<IntegerId> {
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Getter @Setter
     private String username;
-    @Getter @Setter
     private String password;
-
-    @Getter @Setter
-    private String firstName;
-    @Getter @Setter
-    private String lastName;
-    @Getter @Setter
     private Set<Role> role;
-
+    @OneToOne
+    private Employee employee;
 }

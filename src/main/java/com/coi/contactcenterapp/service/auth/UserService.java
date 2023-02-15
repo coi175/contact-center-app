@@ -1,18 +1,15 @@
 package com.coi.contactcenterapp.service.auth;
 
-import com.coi.contactcenterapp.domain.User;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import com.coi.contactcenterapp.domain.auth.User;
+import com.coi.contactcenterapp.domain.common.IntegerId;
+import com.coi.contactcenterapp.repository.UserRepository;
+import com.coi.contactcenterapp.service.common.AbstractService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-public class UserService {
-    public Optional<User> getByUsername(@NonNull String username) {
-        return Optional.empty();
+public class UserService extends AbstractService<User, IntegerId, UserRepository> {
+    public UserService(UserRepository repository) {
+        super(repository);
     }
-
 }

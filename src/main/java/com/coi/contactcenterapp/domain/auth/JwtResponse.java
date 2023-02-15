@@ -1,4 +1,4 @@
-package com.coi.contactcenterapp.domain;
+package com.coi.contactcenterapp.domain.auth;
 
 import lombok.AllArgsConstructor;
 
