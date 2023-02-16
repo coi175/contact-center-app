@@ -37,7 +37,7 @@ public class AuthService {
             final String username = claims.getSubject();
             final String saveRefreshToken = refreshTokenService.get(username); // имя пользователя а не id
             if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final User user = userService.getByUsername(username)
+                final User user = userService.getByUserName(username)
                         .orElseThrow(() -> new AuthException("Пользователь не найден"));
                 final String accessToken = jwtProvider.generateAccessToken(user);
                 return new JwtResponse(accessToken, null);

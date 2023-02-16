@@ -18,10 +18,6 @@ import java.util.Set;
 @Entity
 @Table(name="user_data")
 public class User extends AbstractEntity<IntegerId> {
-    @Getter
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String username;
     private String password;
     private Set<Role> role;

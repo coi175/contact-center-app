@@ -1,17 +1,19 @@
 package com.coi.contactcenterapp.domain.common;
 
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
 import java.io.Serializable;
 
+/**
+ * Abstract Entity contains common functionality for all entities such as IDs
+ * @param <ID>
+ */
 @MappedSuperclass
-public abstract class AbstractEntity<ID extends EntityId> implements Entity, Serializable {
+public abstract class AbstractEntity<ID extends EntityId> implements Serializable {
+    @Id
     private ID id;
 
-    @Id
-    @GeneratedValue
     public ID getId() {
         return id;
     }
