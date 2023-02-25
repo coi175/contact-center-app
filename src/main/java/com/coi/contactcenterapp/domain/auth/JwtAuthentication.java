@@ -1,5 +1,6 @@
 package com.coi.contactcenterapp.domain.auth;
 
+import com.coi.contactcenterapp.domain.entity.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.Authentication;

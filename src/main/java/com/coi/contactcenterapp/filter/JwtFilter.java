@@ -9,6 +9,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,12 +23,12 @@ import java.io.IOException;
 /**
  * Filter that handle who can get access to a resource
  */
+
+@RequiredArgsConstructor
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
     private static final String AUTHORIZATION = "Authorization";
-
     private final JwtProvider jwtProvider;
 
     @Override

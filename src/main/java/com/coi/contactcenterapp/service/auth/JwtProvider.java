@@ -1,6 +1,6 @@
 package com.coi.contactcenterapp.service.auth;
 
-import com.coi.contactcenterapp.domain.auth.User;
+import com.coi.contactcenterapp.domain.entity.person.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -26,8 +26,8 @@ public class JwtProvider {
     private final SecretKey jwtAccessSecret;
     private final SecretKey jwtRefreshSecret;
 
-    public JwtProvider(@Value("$jwt.secret.access") String jwtAccessSecret,
-                       @Value("$jwt.secret.refresh") String jwtRefreshSecret)
+    public JwtProvider(@Value("${jwt.secret.access}") String jwtAccessSecret,
+                       @Value("${jwt.secret.refresh}") String jwtRefreshSecret)
     {
         this.jwtAccessSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtAccessSecret));
         this.jwtRefreshSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtRefreshSecret));
@@ -46,7 +46,7 @@ public class JwtProvider {
                 .setSubject(user.getUsername())
                 .setExpiration(accessExpiration)
                 .signWith(jwtAccessSecret)
-                .claim("role", user.getRole())
+                .claim("role", user.getRole().getAuthority())
                 .compact();
     }
 

@@ -1,20 +1,21 @@
 spring:
   datasource:
-    url: "jdbc:postgresql:/localhost:5432/contact_center_dev"
+    url: jdbc:postgresql://localhost:5432/contact_center_dev
     username: postgres
     password: coi1751
+    driver-class-name: org.postgresql.Driver
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     show-sql: true
   flyway:
-    enabled: true
+    enabled: false
   server:
-    port: 7777
+    port: 8080
 jwt:
   secret:
-    access: djIQjdqidj#*3#Dunh1dodHDU#dOJId3jifhfoIH38j3ido2hfUHiwehefH*h2hup123geheuh8rh'roi3h89hoh
-    refresh: jfkJOJ*6flJLJF:EfiehFHieu81oifjhuefwueoi1r4urito2r3uitgtoutIUEIUEITJFJEFKEJFEJFIiefjwf
+    access: fjkfqjfdkJHFjEJFKefejfsdljGIJJLSGafjgyghfjNsfjN141R851975fhsaF252395Yf27562F525UYF255FS4
+    refresh: JHWJDHHHajhdhfgjkhfHjafgAh1841hfjh34518fhfEWGT89f8fgWEYUTLyqfHfgdwgghgha17YJFlH2Fhg2YK
