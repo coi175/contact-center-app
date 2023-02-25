@@ -1,0 +1,33 @@
+### Registration
+POST localhost:8080/api/auth/register
+content-type: application/json
+
+{
+  "username": "coi175",
+  "password": "Coi11042001Gf",
+  "firstName": "Евгений",
+  "lastName": "Фабер",
+  "email": "coikarp175@gmail.com"
+}
+
+### Login first time
+POST localhost:8080/api/auth/login
+content-type: application/json
+
+{
+  "username": "coi175",
+  "password": "Coi11042001Gf"
+}
+
+### Login with JWT time
+GET localhost:8080/api/auth/test
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb2kxNzUiLCJleHAiOjE2NzczMzU4MjgsInJvbGUiOiJBRE1JTiJ9.mg8dIGpnK_xiVexMnY9yNOTuQgKqVC49-47wXb_6WeE0vDVT0SL5ez8vtXeQLVW41CX66qbCgp6pdbKcKQVhuA
+
+### getNewAccessToken
+POST localhost:8080/api/auth/token
+content-type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb2kxNzUiLCJleHAiOjE2Nzk5Mjc4ODh9.BOd7EYmSbsFNlDGRMrJXVcssRvbGrQwtVYd48yz15K1XuG3JoAB_IlKB7M2Hq7Ho9Jqq1kD6rQrv14W-mgM7zg"
+}
