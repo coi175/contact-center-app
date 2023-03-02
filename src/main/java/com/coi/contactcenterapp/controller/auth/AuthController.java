@@ -1,13 +1,13 @@
 package com.coi.contactcenterapp.controller.auth;
 
-import com.coi.contactcenterapp.domain.auth.JwtRequest;
-import com.coi.contactcenterapp.domain.auth.JwtResponse;
-import com.coi.contactcenterapp.domain.auth.RefreshJwtRequest;
-import com.coi.contactcenterapp.domain.auth.RegisterRequest;
+import com.coi.contactcenterapp.domain.dto.auth.JwtRequest;
+import com.coi.contactcenterapp.domain.dto.auth.JwtResponse;
+import com.coi.contactcenterapp.domain.dto.auth.RefreshJwtRequest;
+import com.coi.contactcenterapp.domain.dto.auth.RegisterRequest;
 import com.coi.contactcenterapp.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

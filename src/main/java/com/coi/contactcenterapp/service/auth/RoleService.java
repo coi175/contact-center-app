@@ -1,6 +1,6 @@
 package com.coi.contactcenterapp.service.auth;
 
-import com.coi.contactcenterapp.domain.entity.Role;
+import com.coi.contactcenterapp.domain.entity.info.Role;
 import com.coi.contactcenterapp.repository.RoleRepository;
 import com.coi.contactcenterapp.service.common.BaseService;
 import lombok.RequiredArgsConstructor;

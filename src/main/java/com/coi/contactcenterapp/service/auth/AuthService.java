@@ -1,8 +1,11 @@
 package com.coi.contactcenterapp.service.auth;
 
-import com.coi.contactcenterapp.domain.auth.*;
-import com.coi.contactcenterapp.domain.entity.RefreshToken;
-import com.coi.contactcenterapp.domain.entity.Role;
+import com.coi.contactcenterapp.domain.dto.auth.JwtAuthentication;
+import com.coi.contactcenterapp.domain.dto.auth.JwtRequest;
+import com.coi.contactcenterapp.domain.dto.auth.JwtResponse;
+import com.coi.contactcenterapp.domain.dto.auth.RegisterRequest;
+import com.coi.contactcenterapp.domain.entity.auth.RefreshToken;
+import com.coi.contactcenterapp.domain.entity.info.Role;
 import com.coi.contactcenterapp.domain.entity.person.*;
 import com.coi.contactcenterapp.exception.AuthException;
 import com.coi.contactcenterapp.exception.EntityNotFoundException;
@@ -35,9 +38,8 @@ public class AuthService {
         if (user != null) {
             throw new RegisterException("Пользователь с таким никнеймом уже существует");
         }
-        Role role = new Role("ADMIN");
-        //Role role = roleService.getEntityById(registerRequest.getRole())
-        //        .orElseThrow(() -> new EntityNotFoundException("Сущность Role с id=" + registerRequest.getRole() + " не найдена"));
+        Role role = roleService.getEntityById(registerRequest.getRole())
+                .orElseThrow(() -> new EntityNotFoundException("Сущность Role с id=" + registerRequest.getRole() + " не найдена"));
         roleService.addRole(role);
 
         // create user
@@ -46,7 +48,7 @@ public class AuthService {
         Employee employee = new Employee(registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getEmail());
         // create employee by role
         switch (role.getRoleId()) {
-            case "ADMIN" -> {
+            case "ADMIN"  -> {
                 Director director = new Director();
                 employee.setDirector(director);
             }

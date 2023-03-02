@@ -1,16 +1,13 @@
 package com.coi.contactcenterapp.util;
 
-import com.coi.contactcenterapp.domain.auth.JwtAuthentication;
-import com.coi.contactcenterapp.domain.entity.Role;
+import com.coi.contactcenterapp.domain.dto.auth.JwtAuthentication;
+import com.coi.contactcenterapp.domain.entity.info.Role;
 import io.jsonwebtoken.Claims;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Utility class to generate JwtAuthentication payload

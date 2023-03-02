@@ -1,4 +1,4 @@
-package com.coi.contactcenterapp.domain.entity;
+package com.coi.contactcenterapp.domain.entity.auth;
 
 import com.coi.contactcenterapp.domain.common.BaseEntity;
 import com.coi.contactcenterapp.domain.entity.person.User;
@@ -27,7 +27,7 @@ public class RefreshToken implements BaseEntity {
     private String username;
     @Column(name = "date", nullable = false)
     @NonNull
-    private LocalDateTime date;
+    private LocalDateTime dateTime;
     @Column(name = "is_expired", nullable = false, columnDefinition = "bool default false")
     private boolean isExpired = false;
 }

@@ -16,10 +16,11 @@ import java.util.List;
 public class Director implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="director_id")
     private Integer directorId;
-    @OneToOne(mappedBy = "director", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "director", cascade = CascadeType.ALL, optional = false)
     @NonNull
     private Employee employee;
-    @OneToMany(mappedBy = "director", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "director", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Manager> managers;
 }

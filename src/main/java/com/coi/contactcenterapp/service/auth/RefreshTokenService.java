@@ -1,6 +1,6 @@
 package com.coi.contactcenterapp.service.auth;
 
-import com.coi.contactcenterapp.domain.entity.RefreshToken;
+import com.coi.contactcenterapp.domain.entity.auth.RefreshToken;
 import com.coi.contactcenterapp.repository.RefreshTokenRepository;
 import com.coi.contactcenterapp.service.common.BaseService;
 import lombok.RequiredArgsConstructor;

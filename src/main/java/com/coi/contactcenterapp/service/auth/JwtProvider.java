@@ -25,12 +25,18 @@ import java.util.Date;
 public class JwtProvider {
     private final SecretKey jwtAccessSecret;
     private final SecretKey jwtRefreshSecret;
+    private final Integer accessTimeToExpInMinutes;
+    private final Integer refreshTimeExpInDays;
 
     public JwtProvider(@Value("${jwt.secret.access}") String jwtAccessSecret,
-                       @Value("${jwt.secret.refresh}") String jwtRefreshSecret)
+                       @Value("${jwt.secret.refresh}") String jwtRefreshSecret,
+                       @Value("${jwt.secret.accessTimeToExpInMinutes}") Integer accessTimeToExpInMinutes,
+                       @Value("${jwt.secret.refreshTimeExpInDays}") Integer refreshTimeExpInDays)
     {
         this.jwtAccessSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtAccessSecret));
         this.jwtRefreshSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtRefreshSecret));
+        this.accessTimeToExpInMinutes = accessTimeToExpInMinutes;
+        this.refreshTimeExpInDays = refreshTimeExpInDays;
     }
 
     /**
@@ -40,7 +46,7 @@ public class JwtProvider {
      */
     public String generateAccessToken(@NonNull User user) {
         final LocalDateTime now = LocalDateTime.now();
-        final Instant accessExpirationInstant = now.plusMinutes(5).atZone(ZoneId.systemDefault()).toInstant();
+        final Instant accessExpirationInstant = now.plusMinutes(accessTimeToExpInMinutes).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
         return Jwts.builder()
                 .setSubject(user.getUsername())
