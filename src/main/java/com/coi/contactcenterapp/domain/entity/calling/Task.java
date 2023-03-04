@@ -1,5 +1,6 @@
 package com.coi.contactcenterapp.domain.entity.calling;
 
+import com.coi.contactcenterapp.domain.common.BaseEntity;
 import com.coi.contactcenterapp.domain.entity.person.Manager;
 import com.coi.contactcenterapp.domain.entity.person.Operator;
 import jakarta.persistence.*;
@@ -16,7 +17,7 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name="task")
-public class Task {
+public class Task implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="task_id")

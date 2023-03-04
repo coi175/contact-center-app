@@ -31,3 +31,9 @@ content-type: application/json
 {
   "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb2kxNzUiLCJleHAiOjE2Nzk5Mjc4ODh9.BOd7EYmSbsFNlDGRMrJXVcssRvbGrQwtVYd48yz15K1XuG3JoAB_IlKB7M2Hq7Ho9Jqq1kD6rQrv14W-mgM7zg"
 }
+
+
+### contactDTO
+GET localhost:8080/contact/5
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb2kxNzUiLCJleHAiOjE2NzczMzU4MjgsInJvbGUiOiJBRE1JTiJ9.mg8dIGpnK_xiVexMnY9yNOTuQgKqVC49-47wXb_6WeE0vDVT0SL5ez8vtXeQLVW41CX66qbCgp6pdbKcKQVhuA

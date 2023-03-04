@@ -1,5 +1,6 @@
 package com.coi.contactcenterapp.domain.entity.calling;
 
+import com.coi.contactcenterapp.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 @Table(name="phone_call")
-public class PhoneCall {
+public class PhoneCall implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="phone_call_id")

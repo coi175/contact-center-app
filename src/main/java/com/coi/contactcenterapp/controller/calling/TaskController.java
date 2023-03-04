@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class TaskController {
+    /*
     private final TaskService taskService;
 
     @GetMapping("task/{taskId}")
@@ -30,13 +31,13 @@ public class TaskController {
     @PostMapping("operator/tasks")
     public ResponseEntity<List<Task_DTO>> getTasksToOperator() {
 
-    }
+    } /*
 
     /**
      * Method creates tasks from contacts depends on its status.
      * Parameters are describe task's count and types.
      * @return
-     */
+     */ /*
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PostMapping("tasks/create/auto")
     public ResponseEntity<Integer> autoCreateTasks(@RequestBody autoTastCreationRequest) {
@@ -65,5 +66,5 @@ public class TaskController {
     @PostMapping("/tasks/delete")
     public ResponseEntity<?> deleteTasks(@RequestBody List<Long> requestTasksId) {
 
-    }
+    } */
 }

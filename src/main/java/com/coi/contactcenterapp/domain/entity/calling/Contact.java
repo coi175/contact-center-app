@@ -1,5 +1,6 @@
 package com.coi.contactcenterapp.domain.entity.calling;
 
+import com.coi.contactcenterapp.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -14,12 +15,12 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name="contact")
-public class Contact {
+public class Contact implements BaseEntity {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name="contact_id")
-    private String contact_id;
+    private String contactId;
     @Column(name="phone_number", unique = true, nullable = false)
     @NonNull
     private String phoneNumber;
@@ -29,6 +30,12 @@ public class Contact {
     @Column(name="contact_note", nullable = false)
     @NonNull
     private String contactNote;
+    @Column(name="contact_type", nullable = false)
+    @NonNull
+    private String contactType;
+    @Column(name="contact_status", nullable = false)
+    @NonNull
+    private String contactStatus;
     @OneToMany(mappedBy = "contact", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PhoneCall> phoneCallList;
     @OneToMany(mappedBy = "contact", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
