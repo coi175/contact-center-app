@@ -28,4 +28,6 @@ public class Operator implements BaseEntity {
     private Manager manager;
     @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Task> taskList;
+    @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<PhoneCall> phoneCallList;
 }

@@ -1,10 +1,7 @@
 package com.coi.contactcenterapp.util;
 
 import com.coi.contactcenterapp.domain.dto.auth.JwtAuthentication;
-import com.coi.contactcenterapp.domain.entity.person.Director;
-import com.coi.contactcenterapp.domain.entity.person.Manager;
-import com.coi.contactcenterapp.domain.entity.person.Operator;
-import com.coi.contactcenterapp.domain.entity.person.User;
+import com.coi.contactcenterapp.domain.entity.person.*;
 import com.coi.contactcenterapp.exception.EntityNotFoundException;
 import com.coi.contactcenterapp.service.auth.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +13,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthUtils {
     private final UserService userService;
+    private static User user;
 
     public Director getDirectorFromAuth() {
-        Director director = getUserFromAuth().getEmployee().getDirector();
+        Director director = getEmployeeFromAuth().getDirector();
         if (director == null) {
             throw new EntityNotFoundException("Данные авторизации не принаджелат директору");
         }
@@ -26,7 +24,7 @@ public class AuthUtils {
     }
 
     public Manager getManagerFromAuth() {
-        Manager manager = getUserFromAuth().getEmployee().getManager();
+        Manager manager = getEmployeeFromAuth().getManager();
         if (manager == null) {
             throw new EntityNotFoundException("Данные авторизации не принаджелат менеджеру");
         }
@@ -34,15 +32,27 @@ public class AuthUtils {
     }
 
     public Operator getOperatorFromAuth() {
-        Operator operator = getUserFromAuth().getEmployee().getOperator();
+        Operator operator = getEmployeeFromAuth().getOperator();
         if (operator == null) {
             throw new EntityNotFoundException("Данные авторизации не принаджелат оператору");
         }
         return operator;
     }
 
+    public Employee getEmployeeFromAuth() {
+        Employee employee = getUserFromAuth().getEmployee();
+        if (employee == null) {
+            throw new EntityNotFoundException("Ошибка аккаунта, у авторизации нет связи с сотрудником");
+        }
+        return employee;
+    }
+
     private User getUserFromAuth() {
-        return userService.getByUsername(getAuthUsername()).orElseThrow(() -> new EntityNotFoundException("Данные авторизации не найдены"));
+        if (AuthUtils.user != null && getAuthUsername().equals(AuthUtils.user.getUsername())) {
+            return AuthUtils.user;
+        } else {
+            return AuthUtils.user = userService.getByUsername(getAuthUsername()).orElseThrow(() -> new EntityNotFoundException("Данные авторизации не найдены"));
+        }
     }
 
     private String getAuthUsername() {

@@ -24,7 +24,7 @@ public class Task implements BaseEntity {
     private Long taskId;
     @Column(name="task_description", nullable = false)
     @NonNull
-    private String tastDescription;
+    private String taskDescription;
     @Column(name="task_status", nullable = false)
     @NonNull
     private String taskStatus;
@@ -33,7 +33,7 @@ public class Task implements BaseEntity {
     private LocalDateTime startDate;
     @Column(name="end_date")
     private LocalDateTime endDate;
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<PhoneCall> phoneCallList;
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "contact_id")

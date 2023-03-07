@@ -17,14 +17,14 @@ public class ContactService implements BaseService<Contact, String> {
     public Optional<Contact> getEntityById(String s) {
         return contactRepository.findById(s);
     }
-    public void saveContact(Contact contact) {
+    public void addContact(Contact contact) {
         contactRepository.save(contact);
     }
     public List<Contact> getAllContacts() {
         return contactRepository.findAll();
     }
 
-    public void saveAllContacts(List<Contact> contactList) {
+    public void addAllContacts(List<Contact> contactList) {
         contactRepository.saveAll(contactList);
     }
 }

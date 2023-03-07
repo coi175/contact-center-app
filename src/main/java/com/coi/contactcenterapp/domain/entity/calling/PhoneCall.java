@@ -1,6 +1,7 @@
 package com.coi.contactcenterapp.domain.entity.calling;
 
 import com.coi.contactcenterapp.domain.common.BaseEntity;
+import com.coi.contactcenterapp.domain.entity.person.Operator;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,4 +37,8 @@ public class PhoneCall implements BaseEntity {
     @JoinColumn(name = "task_id")
     @NonNull
     private Task task;
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "operator_id")
+    @NonNull
+    private Operator operator;
 }
