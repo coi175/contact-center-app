@@ -4,6 +4,7 @@ import com.coi.contactcenterapp.domain.dto.auth.JwtRequest;
 import com.coi.contactcenterapp.domain.dto.auth.JwtResponse;
 import com.coi.contactcenterapp.domain.dto.auth.RefreshJwtRequest;
 import com.coi.contactcenterapp.domain.dto.auth.RegisterRequest;
+import com.coi.contactcenterapp.exception.RegisterException;
 import com.coi.contactcenterapp.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,11 @@ public class AuthController {
     private final AuthService authService;
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
-        authService.register(registerRequest);
+        try {
+            authService.register(registerRequest);
+        } catch (RegisterException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
         return ResponseEntity.ok("200");
     }
     @PostMapping("/login")

@@ -10,8 +10,10 @@ import com.coi.contactcenterapp.domain.mapper.info.TaskListMapper;
 import com.coi.contactcenterapp.exception.EntityNotFoundException;
 import com.coi.contactcenterapp.service.calling.ContactService;
 import com.coi.contactcenterapp.service.calling.TaskService;
+import com.coi.contactcenterapp.service.info.ActionLogService;
 import com.coi.contactcenterapp.util.AuthUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -31,6 +33,7 @@ public class TaskController {
     private final TaskMapper taskMapper;
     private final ContactService contactService;
     private final TaskListMapper taskListMapper;
+    private final ActionLogService actionLogService;
 
     @GetMapping("task/{taskId}")
     public ResponseEntity<Task_DTO> getTask(@PathVariable Long taskId) {
@@ -54,9 +57,9 @@ public class TaskController {
     public ResponseEntity<List<Task_DTO>> getTasksByParams(@RequestBody Task_DTO taskParams) {
         return ResponseEntity
                 .ok(taskListMapper
-                        .toDTO(taskService.getAllTasksByParams(taskParams.getOperator().getOperatorId(),
-                                taskParams.getManager().getManagerId(),
-                                taskParams.getContact().getContactId(),
+                        .toDTO(taskService.getAllTasksByParams(taskParams.getOperatorId(),
+                                taskParams.getManagerId(),
+                                taskParams.getContactId(),
                                 taskParams.getTaskStatus())));
     }
 
@@ -76,45 +79,79 @@ public class TaskController {
      * @return
      */
     @PreAuthorize("hasAuthority('MODERATOR')")
-    @PostMapping("tasks/create/auto")
+    @PostMapping("tasks/manager/create/auto")
     public ResponseEntity<Integer> autoCreateTasks(@RequestBody List<TaskAutoCreationRequest> taskAutoCreationRequestList) {
+        actionLogService.log(String.format("Попытка автоматически создать %s задач", taskAutoCreationRequestList.size()), "INFO", authUtils.getEmployeeFromAuth());
         return ResponseEntity.ok(taskService.addAllTasks(
                 taskAutoCreationRequestList.stream()
                         .map(t -> Task_DTO.builder().taskDescription(t.getTaskDescription())
                                 .startDate(LocalDateTime.now())
                                 .taskStatus("NEW")
-                                .manager(authUtils.getManagerFromAuth())
-                                .contact(contactService.getEntityById(t.getContactId()).orElse(null))
+                                .managerId(authUtils.getManagerFromAuth().getManagerId())
+                                .contactId(contactService.getEntityById(t.getContactId()).orElse(new Contact()).getContactId())
                                 .build())
-                        .filter(t -> t.getContact() != null)
+                        .filter(t -> t.getContactId() != null)
                         .map(taskMapper::toEntity)
                         .toList())
                 .size()
         );
     }
 
-    @PreAuthorize("hasAuthority('MODERATOR')")
+    //@PreAuthorize("hasAuthority('MODERATOR')")
     @PostMapping("/tasks/manager/create")
     public ResponseEntity<Integer> createTasks(@RequestBody List<Task_DTO> requestTasks) {
+        actionLogService.log(String.format("Попытка создать задач: %s ", requestTasks.size()), "INFO", authUtils.getEmployeeFromAuth());
+        Contact contact = new Contact("test", "test", "test", "test", "test");
+        Task task = taskMapper.toEntity(requestTasks.get(0));
         return ResponseEntity.ok(taskService.addAllTasks(taskListMapper.toEntity(requestTasks)).size());
     }
 
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PutMapping("/task/manager/update/{taskId}")
-    public ResponseEntity<?> managerUpdateTask(@PathVariable Long taskId, @RequestBody Task_DTO requestTask) {
+    public ResponseEntity<Task> managerUpdateTask(@PathVariable Long taskId, @RequestBody Task_DTO requestTask) {
+        actionLogService.log(String.format("Попытка менеджера обновить задачу с id: %s ", taskId), "INFO", authUtils.getEmployeeFromAuth());
         Task task = taskService.getEntityById(taskId).orElseThrow(() -> new EntityNotFoundException("Задача не найдена"));
         Task_DTO taskDto = taskMapper.toDTO(task);
+        if (requestTask.getTaskDescription() != null) {
+            taskDto.setTaskDescription(requestTask.getTaskDescription());
+        }
+        if (requestTask.getTaskStatus() != null) {
+            taskDto.setTaskStatus(requestTask.getTaskStatus());
+        }
+        if (requestTask.getManagerId() != null) {
+            taskDto.setManagerId(requestTask.getManagerId());
+        }
+        if (requestTask.getOperatorId() != null) {
+            taskDto.setOperatorId(requestTask.getOperatorId());
+        }
+        if (requestTask.getContactId() != null) {
+            taskDto.setContactId(requestTask.getContactId());
+        }
+        return ResponseEntity.ok(taskService.addTask(taskMapper.toEntity(taskDto)));
     }
 
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/task/operator/update/{taskId}")
     public ResponseEntity<?> operatorUpdateTask(@PathVariable Long taskId, @RequestBody Task_DTO requestTask) {
-
+        actionLogService.log(String.format("Попытка оператора обновить задачу с id: %s ", taskId), "INFO", authUtils.getEmployeeFromAuth());
+        Task task = taskService.getEntityById(taskId).orElseThrow(() -> new EntityNotFoundException("Задача не найдена"));
+        Task_DTO taskDto = taskMapper.toDTO(task);
+        if (requestTask.getTaskStatus() != null) {
+            taskDto.setTaskStatus(requestTask.getTaskStatus());
+        }
+        if (requestTask.getOperatorId() != null) {
+            taskDto.setOperatorId(requestTask.getOperatorId());
+        }
+        return ResponseEntity.ok(taskService.addTask(taskMapper.toEntity(taskDto)));
     }
 
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PostMapping("/tasks/delete")
     public ResponseEntity<?> deleteTasks(@RequestBody List<Long> requestTasksId) {
-        return ResponseEntity.ok(taskService.deleteAllTasksById(requestTasksId).size());
+        actionLogService.log(String.format("Попытка удалить задач: %s ", requestTasksId.size()), "INFO", authUtils.getEmployeeFromAuth());
+        for(Long taskId : requestTasksId) {
+            taskService.deleteTask(taskId);
+        }
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

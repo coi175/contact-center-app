@@ -40,7 +40,6 @@ public class AuthService {
         }
         Role role = roleService.getEntityById(registerRequest.getRole())
                 .orElseThrow(() -> new EntityNotFoundException("Сущность Role с id=" + registerRequest.getRole() + " не найдена"));
-        roleService.addRole(role);
 
         // create user
         user = new User(registerRequest.getUsername(), passwordEncoder.encode(registerRequest.getPassword()), role);

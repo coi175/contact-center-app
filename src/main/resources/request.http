@@ -7,6 +7,7 @@ content-type: application/json
   "password": "Coi11042001Gf",
   "firstName": "Евгений",
   "lastName": "Фабер",
+  "role": "ADMIN",
   "email": "coikarp175@gmail.com"
 }
 
@@ -34,6 +35,17 @@ content-type: application/json
 
 
 ### contactDTO
-GET localhost:8080/contact/5
+POST localhost:8080/tasks/manager/create
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb2kxNzUiLCJleHAiOjE2NzczMzU4MjgsInJvbGUiOiJBRE1JTiJ9.mg8dIGpnK_xiVexMnY9yNOTuQgKqVC49-47wXb_6WeE0vDVT0SL5ez8vtXeQLVW41CX66qbCgp6pdbKcKQVhuA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb2kxNzUiLCJleHAiOjE2NzgyNzI5NzQsInJvbGUiOiJBRE1JTiJ9.FEvCGpEkcKkhfHUrfvdgjKqRJypJg40z2uv7oqq4V-EuifFvS2XDdGQOnYNfuRtJzIySzTLFeJ0K4Td7ZSCByg
+
+[
+  {
+    "taskDescription": "тест",
+    "taskStatus": "NEW",
+    "startDate": "2020-12-31T15:53:16",
+    "contactId": "12a39c11-4c4d-4a54-9ce9-08e72d6c6d2c",
+    "managerId": "0",
+    "operatorId": "0"
+  }
+]

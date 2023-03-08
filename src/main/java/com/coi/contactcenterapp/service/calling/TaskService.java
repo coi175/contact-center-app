@@ -19,16 +19,21 @@ public class TaskService implements BaseService<Task, Long> {
     public Optional<Task> getEntityById(Long id) {
         return taskRepository.findById(id);
     }
+    public Task addTask(Task task) {
+        return taskRepository.save(task);
+    }
 
     public List<Task> addAllTasks(List<Task> tasks) {
         return taskRepository.saveAll(tasks);
     }
 
-    public List<Task> deleteAllTasksById(List<Long> taskIdList) {
-        return taskRepository.deleteAllByTaskId(taskIdList);
+    public void deleteTask(Long taskId) {
+        taskRepository.deleteById(taskId);
     }
 
     public List<Task> getAllTasksByParams(Integer operatorId, Integer managerId, String contactId, String taskStatus) {
         return taskRepository.findAllByTasksByParams(operatorId, managerId, contactId, taskStatus);
     }
+
+
 }

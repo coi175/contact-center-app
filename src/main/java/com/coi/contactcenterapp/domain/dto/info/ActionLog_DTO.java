@@ -15,5 +15,5 @@ public class ActionLog_DTO {
     private String logMessage;
     private LocalDateTime dateTime;
     private String actionType;
-    private Employee employee;
+    private Integer employeeId;
 }

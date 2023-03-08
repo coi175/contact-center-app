@@ -14,4 +14,7 @@ public class PhoneCall_DTO {
     private LocalDateTime callDate;
     private Integer callDuration;
     private String callStatus;
+    private String contactId;
+    private Long taskId;
+    private Integer operatorId;
 }

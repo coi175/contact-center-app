@@ -50,9 +50,8 @@ public class PhoneCallController {
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("call/add")
     public ResponseEntity<?> createCall(@RequestBody PhoneCall_DTO phoneCallDto) {
-        PhoneCall phoneCall = phoneCallMapper.toEntity(phoneCallDto);
-        PhoneCall savedPhoneCall = phoneCallService.addPhoneCall(phoneCall);
-        actionLogService.log(String.format("Добавлен звонок с id = %s", savedPhoneCall.getPhoneCallId()), "INFO", authUtils.getEmployeeFromAuth());
+        PhoneCall phoneCall = phoneCallService.addPhoneCall(phoneCallMapper.toEntity(phoneCallDto));
+        actionLogService.log(String.format("Добавлен звонок с id = %s", phoneCall.getPhoneCallId()), "INFO", authUtils.getEmployeeFromAuth());
         return ResponseEntity.ok(phoneCall);
     }
 }

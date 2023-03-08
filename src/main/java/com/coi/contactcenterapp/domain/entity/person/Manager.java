@@ -21,7 +21,7 @@ public class Manager implements BaseEntity {
     @OneToOne(mappedBy = "manager", cascade = CascadeType.ALL, optional = false)
     @NonNull
     private Employee employee;
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "director_id")
     private Director director;
     @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

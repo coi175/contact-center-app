@@ -20,7 +20,7 @@ public class Task_DTO {
     private String taskStatus;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private Contact contact;
-    private Manager manager;
-    private Operator operator;
+    private String contactId;
+    private Integer managerId;
+    private Integer operatorId;
 }

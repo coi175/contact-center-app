@@ -17,8 +17,8 @@ public class ContactService implements BaseService<Contact, String> {
     public Optional<Contact> getEntityById(String s) {
         return contactRepository.findById(s);
     }
-    public void addContact(Contact contact) {
-        contactRepository.save(contact);
+    public Contact addContact(Contact contact) {
+        return contactRepository.save(contact);
     }
     public List<Contact> getAllContacts() {
         return contactRepository.findAll();

@@ -41,10 +41,10 @@ public class Task implements BaseEntity {
     private Contact contact;
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "manager_id")
-    @NonNull
+    //@NonNull
     private Manager manager;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "operator_id")
-    @NonNull
+    //@NonNull
     private Operator operator;
 }
