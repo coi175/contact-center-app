@@ -1,12 +1,16 @@
 package com.coi.contactcenterapp.service.auth;
 
-import com.coi.contactcenterapp.domain.auth.*;
-import com.coi.contactcenterapp.domain.entity.RefreshToken;
-import com.coi.contactcenterapp.domain.entity.Role;
+import com.coi.contactcenterapp.domain.dto.auth.JwtAuthentication;
+import com.coi.contactcenterapp.domain.dto.auth.JwtRequest;
+import com.coi.contactcenterapp.domain.dto.auth.JwtResponse;
+import com.coi.contactcenterapp.domain.dto.auth.RegisterRequest;
+import com.coi.contactcenterapp.domain.entity.auth.RefreshToken;
+import com.coi.contactcenterapp.domain.entity.info.Role;
 import com.coi.contactcenterapp.domain.entity.person.*;
 import com.coi.contactcenterapp.exception.AuthException;
 import com.coi.contactcenterapp.exception.EntityNotFoundException;
 import com.coi.contactcenterapp.exception.RegisterException;
+import com.coi.contactcenterapp.util.AuthUtils;
 import io.jsonwebtoken.Claims;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +29,7 @@ public class AuthService {
     private final UserService userService;
     private final RefreshTokenService refreshTokenService;
     private final JwtProvider jwtProvider;
-
+    private final AuthUtils authUtils;
     private final RoleService roleService;
 
     private final PasswordEncoder passwordEncoder;
@@ -35,10 +39,8 @@ public class AuthService {
         if (user != null) {
             throw new RegisterException("Пользователь с таким никнеймом уже существует");
         }
-        Role role = new Role("ADMIN");
-        //Role role = roleService.getEntityById(registerRequest.getRole())
-        //        .orElseThrow(() -> new EntityNotFoundException("Сущность Role с id=" + registerRequest.getRole() + " не найдена"));
-        roleService.addRole(role);
+        Role role = roleService.getEntityById(registerRequest.getRole())
+                .orElseThrow(() -> new EntityNotFoundException("Сущность Role с id=" + registerRequest.getRole() + " не найдена"));
 
         // create user
         user = new User(registerRequest.getUsername(), passwordEncoder.encode(registerRequest.getPassword()), role);
@@ -46,16 +48,18 @@ public class AuthService {
         Employee employee = new Employee(registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getEmail());
         // create employee by role
         switch (role.getRoleId()) {
-            case "ADMIN" -> {
+            case "ADMIN"  -> {
                 Director director = new Director();
                 employee.setDirector(director);
             }
             case "MODERATOR" -> {
                 Manager manager = new Manager();
+                manager.setDirector(authUtils.getDirectorFromAuth());
                 employee.setManager(manager);
             }
             case "USER" -> {
                 Operator operator = new Operator();
+                operator.setManager(authUtils.getManagerFromAuth());
                 employee.setOperator(operator);
             }
         }

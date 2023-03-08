@@ -1,4 +1,4 @@
-package com.coi.contactcenterapp.domain.entity;
+package com.coi.contactcenterapp.domain.entity.info;
 
 import com.coi.contactcenterapp.domain.common.BaseEntity;
 import jakarta.persistence.Column;

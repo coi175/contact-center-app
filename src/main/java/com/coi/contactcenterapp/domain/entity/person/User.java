@@ -1,13 +1,9 @@
 package com.coi.contactcenterapp.domain.entity.person;
 
 import com.coi.contactcenterapp.domain.common.BaseEntity;
-import com.coi.contactcenterapp.domain.entity.RefreshToken;
-import com.coi.contactcenterapp.domain.entity.Role;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.coi.contactcenterapp.domain.entity.info.Role;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -20,6 +16,7 @@ import java.util.List;
 public class User implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="user_id")
     private Integer userId;
     @Column(name="username", unique = true, nullable = false)
     @NonNull
@@ -27,12 +24,12 @@ public class User implements BaseEntity {
     @Column(name="password", nullable = false)
     @NonNull
     private String password;
-    @ManyToOne
-    @JoinColumn(name = "role", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "role")
     @NonNull
     private Role role;
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn(name="employee_id")
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @PrimaryKeyJoinColumn
     @ToString.Exclude
     private Employee employee;
 }

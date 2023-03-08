@@ -1,6 +1,6 @@
 package com.coi.contactcenterapp.filter;
 
-import com.coi.contactcenterapp.domain.auth.JwtAuthentication;
+import com.coi.contactcenterapp.domain.dto.auth.JwtAuthentication;
 import com.coi.contactcenterapp.service.auth.JwtProvider;
 import com.coi.contactcenterapp.util.JwtUtils;
 import io.jsonwebtoken.Claims;
@@ -9,8 +9,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;

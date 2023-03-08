@@ -1,8 +1,11 @@
 package com.coi.contactcenterapp.domain.entity.person;
 
 import com.coi.contactcenterapp.domain.common.BaseEntity;
+import com.coi.contactcenterapp.domain.entity.info.ActionLog;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @NoArgsConstructor
@@ -14,6 +17,7 @@ import lombok.*;
 public class Employee implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="employee_id")
     private Integer employeeId;
     @Column(name = "first_name", nullable = false)
     @NonNull
@@ -24,15 +28,17 @@ public class Employee implements BaseEntity {
     @Column(name = "email", nullable = false)
     @NonNull
     private String email;
-    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, optional = false)
     private User user;
     @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn(name="director_id")
+    @PrimaryKeyJoinColumn
     private Director director;
     @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn(name="manager_id")
+    @PrimaryKeyJoinColumn
     private Manager manager;
     @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn(name="operator_id")
+    @PrimaryKeyJoinColumn
     private Operator operator;
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ActionLog> actionLogList;
 }
