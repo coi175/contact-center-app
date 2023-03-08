@@ -1,13 +1,8 @@
 package com.coi.contactcenterapp.domain.dto.calling;
 
-import com.coi.contactcenterapp.domain.entity.calling.Contact;
-import com.coi.contactcenterapp.domain.entity.calling.PhoneCall;
-import com.coi.contactcenterapp.domain.entity.person.Manager;
-import com.coi.contactcenterapp.domain.entity.person.Operator;
-import lombok.*;
 
+import lombok.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter

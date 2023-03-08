@@ -10,6 +10,7 @@ import com.coi.contactcenterapp.domain.entity.person.*;
 import com.coi.contactcenterapp.exception.AuthException;
 import com.coi.contactcenterapp.exception.EntityNotFoundException;
 import com.coi.contactcenterapp.exception.RegisterException;
+import com.coi.contactcenterapp.util.AuthUtils;
 import io.jsonwebtoken.Claims;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class AuthService {
     private final UserService userService;
     private final RefreshTokenService refreshTokenService;
     private final JwtProvider jwtProvider;
-
+    private final AuthUtils authUtils;
     private final RoleService roleService;
 
     private final PasswordEncoder passwordEncoder;
@@ -53,10 +54,12 @@ public class AuthService {
             }
             case "MODERATOR" -> {
                 Manager manager = new Manager();
+                manager.setDirector(authUtils.getDirectorFromAuth());
                 employee.setManager(manager);
             }
             case "USER" -> {
                 Operator operator = new Operator();
+                operator.setManager(authUtils.getManagerFromAuth());
                 employee.setOperator(operator);
             }
         }

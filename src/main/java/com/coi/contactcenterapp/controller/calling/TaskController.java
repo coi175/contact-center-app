@@ -64,13 +64,13 @@ public class TaskController {
     }
 
     @PostMapping("operator/{operatorId}/tasks")
-    public ResponseEntity<List<Task_DTO>> getTasksByOperator(@PathVariable Integer operatorId) {
+    public ResponseEntity<List<Task_DTO>> getTasksByOperator(@PathVariable Integer operatorId, @RequestBody String taskStatus) {
         if (operatorId == null) {
             operatorId = authUtils.getOperatorFromAuth().getOperatorId();
         }
         return ResponseEntity
                 .ok(taskListMapper
-                        .toDTO(taskService.getAllTasksByParams(operatorId, null, null, null)));
+                        .toDTO(taskService.getAllTasksByParams(operatorId, null, null, taskStatus)));
     }
 
     /**
@@ -97,14 +97,12 @@ public class TaskController {
         );
     }
 
-    //@PreAuthorize("hasAuthority('MODERATOR')")
+    /*PreAuthorize("hasAuthority('MODERATOR')")
     @PostMapping("/tasks/manager/create")
     public ResponseEntity<Integer> createTasks(@RequestBody List<Task_DTO> requestTasks) {
         actionLogService.log(String.format("Попытка создать задач: %s ", requestTasks.size()), "INFO", authUtils.getEmployeeFromAuth());
-        Contact contact = new Contact("test", "test", "test", "test", "test");
-        Task task = taskMapper.toEntity(requestTasks.get(0));
         return ResponseEntity.ok(taskService.addAllTasks(taskListMapper.toEntity(requestTasks)).size());
-    }
+    } */
 
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PutMapping("/task/manager/update/{taskId}")
