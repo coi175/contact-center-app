@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api/")
 public class ContactController {
     private final AuthUtils authUtils;
     private final ContactMapper contactMapper;
@@ -40,7 +41,7 @@ public class ContactController {
     }
 
     @PreAuthorize("hasAuthority('MODERATOR')")
-    @PostMapping("/contacts/manager/crm/receive")
+    @PostMapping("contacts/manager/crm/receive")
     public ResponseEntity<?> receiveContactsFromCRM() {
         actionLogService.log("Попытка получить контакты из CRM", "INFO", authUtils.getEmployeeFromAuth());
         Map<String, Contact> contactsFromDatabase = contactService.getAllContacts().stream().collect(Collectors.toMap(Contact::getContactId, contact -> contact));

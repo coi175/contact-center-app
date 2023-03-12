@@ -20,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api/")
 public class PhoneCallController {
     private final AuthUtils authUtils;
     private final PhoneCallService phoneCallService;

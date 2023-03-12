@@ -74,9 +74,11 @@ public class AuthService {
         if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
             final String refreshToken = jwtProvider.generateRefreshToken(user);
-            RefreshToken refreshTokenEntity = new RefreshToken(refreshToken, user.getUsername(),  LocalDateTime.now());
+            RefreshToken refreshTokenEntity = refreshTokenService.getByUsername(user.getUsername()).orElse(new RefreshToken(refreshToken, user.getUsername(), LocalDateTime.now()));
+            refreshTokenEntity.setToken(refreshToken);
+            refreshTokenEntity.setDateTime(LocalDateTime.now());
             refreshTokenService.addEntity(refreshTokenEntity);
-            return new JwtResponse(accessToken, refreshToken);
+            return new JwtResponse(accessToken, refreshToken, user.getRole().getRoleId());
         } else {
             throw new AuthException("Неправильный пароль");
         }
@@ -91,10 +93,10 @@ public class AuthService {
                 final User user = userService.getByUsername(username)
                         .orElseThrow(() -> new AuthException("Пользователь не найден"));
                 final String accessToken = jwtProvider.generateAccessToken(user);
-                return new JwtResponse(accessToken, null);
+                return new JwtResponse(accessToken, null, user.getRole().getRoleId());
             }
         }
-        return new JwtResponse(null, null);
+        return new JwtResponse(null, null, null);
     }
 
     public JwtResponse refresh(@NonNull String refreshToken) {
@@ -105,11 +107,15 @@ public class AuthService {
             if (saveRefreshToken != null && saveRefreshToken.getToken().equals(refreshToken)) {
                 final User user = userService.getByUsername(username)
                         .orElseThrow(() -> new AuthException("Пользователь не найден"));
+                refreshTokenService.delete(saveRefreshToken);
                 final String accessToken = jwtProvider.generateAccessToken(user);
                 final String newRefreshToken = jwtProvider.generateRefreshToken(user);
-                RefreshToken refreshTokenEntity = new RefreshToken(refreshToken, username,  LocalDateTime.now());
-                refreshTokenService.addEntity(refreshTokenEntity);
-                return new JwtResponse(accessToken, newRefreshToken);
+                // update refresh token in storage
+                saveRefreshToken.setToken(newRefreshToken);
+                saveRefreshToken.setDateTime(LocalDateTime.now());
+                refreshTokenService.addEntity(saveRefreshToken);
+
+                return new JwtResponse(accessToken, newRefreshToken, user.getRole().getRoleId());
             }
         }
         throw new AuthException("Невалидный JWT токен");

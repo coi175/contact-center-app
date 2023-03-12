@@ -9,6 +9,9 @@ import com.coi.contactcenterapp.repository.OperatorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for mapper which map ids from Task_DTO to Entities from Task
+ */
 @RequiredArgsConstructor
 @Service
 public class MapperIdToEntityTaskService {

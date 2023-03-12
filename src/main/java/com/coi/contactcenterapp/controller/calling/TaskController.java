@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api/")
 public class TaskController {
     private final AuthUtils authUtils;
     private final TaskService taskService;
@@ -105,7 +106,7 @@ public class TaskController {
     } */
 
     @PreAuthorize("hasAuthority('MODERATOR')")
-    @PutMapping("/task/manager/update/{taskId}")
+    @PutMapping("task/manager/update/{taskId}")
     public ResponseEntity<Task> managerUpdateTask(@PathVariable Long taskId, @RequestBody Task_DTO requestTask) {
         actionLogService.log(String.format("Попытка менеджера обновить задачу с id: %s ", taskId), "INFO", authUtils.getEmployeeFromAuth());
         Task task = taskService.getEntityById(taskId).orElseThrow(() -> new EntityNotFoundException("Задача не найдена"));
@@ -129,7 +130,7 @@ public class TaskController {
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @PutMapping("/task/operator/update/{taskId}")
+    @PutMapping("task/operator/update/{taskId}")
     public ResponseEntity<?> operatorUpdateTask(@PathVariable Long taskId, @RequestBody Task_DTO requestTask) {
         actionLogService.log(String.format("Попытка оператора обновить задачу с id: %s ", taskId), "INFO", authUtils.getEmployeeFromAuth());
         Task task = taskService.getEntityById(taskId).orElseThrow(() -> new EntityNotFoundException("Задача не найдена"));
@@ -144,7 +145,7 @@ public class TaskController {
     }
 
     @PreAuthorize("hasAuthority('MODERATOR')")
-    @PostMapping("/tasks/delete")
+    @PostMapping("tasks/delete")
     public ResponseEntity<?> deleteTasks(@RequestBody List<Long> requestTasksId) {
         actionLogService.log(String.format("Попытка удалить задач: %s ", requestTasksId.size()), "INFO", authUtils.getEmployeeFromAuth());
         for(Long taskId : requestTasksId) {
