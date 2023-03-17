@@ -17,7 +17,7 @@ public class AuthController {
     private final AuthService authService;
     private final AuthUtils authUtils;
 
-    @PreAuthorize("hasAnyAuthority('MODERATOR', 'ADMIN')")
+    //@PreAuthorize("hasAnyAuthority('MODERATOR', 'ADMIN')")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         if (registerRequest.getRole() == null) {

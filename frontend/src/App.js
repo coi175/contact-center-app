@@ -8,6 +8,8 @@ import Register from "./auth/component/Register";
 import AppNavbar from "./navigation/AppNavbar";
 import Unauthorized from "./auth/component/Unauthorized";
 import Auth from "./auth/component/Auth";
+import Manager from "./panel/manager/Manager";
+import Log from "./panel/common/Log";
 
 const App = () => {
   return (
@@ -17,10 +19,11 @@ const App = () => {
             <Routes>
                 <Route path="/login" element={<Login/>} />
                 <Route path="/unauthorized" element={<Unauthorized/>}/>
-                <Route element={<Auth allowedRoles={["MANAGER", "ADMIN"]} />}>
+                <Route element={<Auth allowedRoles={["MODERATOR", "ADMIN"]} />}>
                     <Route path="/register" element={<Register/>} />
                 </Route>
-                <Route element={<Auth allowedRoles={["MANAGER"]} />}>
+                <Route path="/logs" element={<Log/>} />
+                <Route element={<Auth allowedRoles={["MODERATOR"]} />}>
                     <Route path="/manager" element={<Manager/>} />
                 </Route>
             </Routes>

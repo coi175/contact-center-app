@@ -10,6 +10,10 @@ import com.coi.contactcenterapp.domain.entity.person.*;
 import com.coi.contactcenterapp.exception.AuthException;
 import com.coi.contactcenterapp.exception.EntityNotFoundException;
 import com.coi.contactcenterapp.exception.RegisterException;
+import com.coi.contactcenterapp.service.person.DirectorService;
+import com.coi.contactcenterapp.service.person.EmployeeService;
+import com.coi.contactcenterapp.service.person.ManagerService;
+import com.coi.contactcenterapp.service.person.OperatorService;
 import com.coi.contactcenterapp.util.AuthUtils;
 import io.jsonwebtoken.Claims;
 import lombok.NonNull;
@@ -31,7 +35,11 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final AuthUtils authUtils;
     private final RoleService roleService;
+    private final DirectorService directorService;
+    private final OperatorService operatorService;
+    private final ManagerService managerService;
 
+    private final EmployeeService employeeService;
     private final PasswordEncoder passwordEncoder;
 
     public void register(@NonNull RegisterRequest registerRequest) {
@@ -46,24 +54,31 @@ public class AuthService {
         user = new User(registerRequest.getUsername(), passwordEncoder.encode(registerRequest.getPassword()), role);
         // create employee
         Employee employee = new Employee(registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getEmail());
+        Employee savedEmployee = employeeService.add(employee);
+
         // create employee by role
         switch (role.getRoleId()) {
             case "ADMIN"  -> {
                 Director director = new Director();
-                employee.setDirector(director);
+                director.setDirectorId(savedEmployee.getEmployeeId());
+                directorService.save(director);
             }
             case "MODERATOR" -> {
                 Manager manager = new Manager();
                 manager.setDirector(authUtils.getDirectorFromAuth());
-                employee.setManager(manager);
+                manager.setManagerId(savedEmployee.getEmployeeId());
+                managerService.save(manager);
+
             }
             case "USER" -> {
                 Operator operator = new Operator();
                 operator.setManager(authUtils.getManagerFromAuth());
-                employee.setOperator(operator);
+                operator.setOperatorId(savedEmployee.getEmployeeId());
+                operatorService.save(operator);
             }
         }
-        user.setEmployee(employee);
+        user.setEmployee(savedEmployee);
+        user.setUserId(savedEmployee.getEmployeeId());
         userService.addUser(user);
     }
 

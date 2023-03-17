@@ -1,9 +1,12 @@
 package com.coi.contactcenterapp.domain.entity.calling;
 
 import com.coi.contactcenterapp.domain.common.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -12,13 +15,12 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
-@ToString
 @Entity
 @Table(name="contact")
 public class Contact implements BaseEntity {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    //@GeneratedValue(generator = "uuid")
+    //@GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name="contact_id")
     private String contactId;
     @Column(name="phone_number", unique = true, nullable = false)

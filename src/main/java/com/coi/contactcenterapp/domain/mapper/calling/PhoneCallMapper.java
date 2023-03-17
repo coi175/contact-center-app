@@ -6,6 +6,8 @@ import com.coi.contactcenterapp.domain.mapper.service.MapperIdToEntityPhoneCallS
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", uses = { MapperIdToEntityPhoneCallService.class })
 public interface PhoneCallMapper {
     @Mapping(source = "contact.contactId", target = "contactId")
@@ -16,4 +18,7 @@ public interface PhoneCallMapper {
     @Mapping(source = "taskId", target = "task")
     @Mapping(source = "operatorId", target = "operator")
     PhoneCall toEntity(PhoneCall_DTO phoneCallDto);
+
+    List<PhoneCall_DTO> toDTO(List<PhoneCall> phoneCalls);
+    List<PhoneCall> toEntity(List<PhoneCall_DTO> phoneCallDtos);
 }

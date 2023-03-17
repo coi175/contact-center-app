@@ -50,11 +50,11 @@ const Login = () => {
             AuthService.login(username, password).then(
                 () => {
                     if (TokenService.getRoleFromToken() === "ADMIN") {
-                        navigate("/admin");
+                        navigate("/director");
                     } else if (TokenService.getRoleFromToken() === "MODERATOR") {
-                        navigate("/moderator");
+                        navigate("/manager");
                     } else if (TokenService.getRoleFromToken() === "USER") {
-                        navigate("/user");
+                        navigate("/operator");
                     }
                     window.location.reload();
                 },

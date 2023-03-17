@@ -15,7 +15,6 @@ import java.util.List;
 @Table(name="manager")
 public class Manager implements BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="manager_id")
     private Integer managerId;
     @OneToOne(mappedBy = "manager", cascade = CascadeType.ALL, optional = false)
@@ -24,7 +23,7 @@ public class Manager implements BaseEntity {
     @ManyToOne
     @JoinColumn(name = "director_id")
     private Director director;
-    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Operator> operators;
     @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Task> taskList;

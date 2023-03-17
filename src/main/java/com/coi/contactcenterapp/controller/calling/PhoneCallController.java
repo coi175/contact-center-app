@@ -1,11 +1,8 @@
 package com.coi.contactcenterapp.controller.calling;
 
 import com.coi.contactcenterapp.domain.dto.calling.CallsRequest;
-import com.coi.contactcenterapp.domain.dto.calling.Contact_DTO;
 import com.coi.contactcenterapp.domain.dto.calling.PhoneCall_DTO;
-import com.coi.contactcenterapp.domain.entity.calling.Contact;
 import com.coi.contactcenterapp.domain.entity.calling.PhoneCall;
-import com.coi.contactcenterapp.domain.mapper.calling.PhoneCallListMapper;
 import com.coi.contactcenterapp.domain.mapper.calling.PhoneCallMapper;
 import com.coi.contactcenterapp.exception.EntityNotFoundException;
 import com.coi.contactcenterapp.service.calling.PhoneCallService;
@@ -25,7 +22,6 @@ public class PhoneCallController {
     private final AuthUtils authUtils;
     private final PhoneCallService phoneCallService;
     private final PhoneCallMapper phoneCallMapper;
-    private final PhoneCallListMapper phoneCallListMapper;
     private final ActionLogService actionLogService;
 
     /**
@@ -37,7 +33,7 @@ public class PhoneCallController {
      */
     @PostMapping("calls/")
     public ResponseEntity<List<PhoneCall_DTO>> getCallsByParams(@RequestBody CallsRequest callsRequest) {
-        List<PhoneCall_DTO> phoneCallDtos = phoneCallListMapper.toDTO(phoneCallService
+        List<PhoneCall_DTO> phoneCallDtos = phoneCallMapper.toDTO(phoneCallService
                 .getPhoneCallsByParams(callsRequest.getContactId(), callsRequest.getTaskId(), callsRequest.getOperatorId()));
         return ResponseEntity.ok(phoneCallDtos);
     }

@@ -17,7 +17,6 @@ import java.util.List;
 @Table(name="operator")
 public class Operator implements BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="operator_id")
     private Integer operatorId;
     @OneToOne(mappedBy = "operator", cascade = CascadeType.ALL, optional = false)
@@ -26,8 +25,8 @@ public class Operator implements BaseEntity {
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "manager_id")
     private Manager manager;
-    @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     private List<Task> taskList;
-    @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     private List<PhoneCall> phoneCallList;
 }

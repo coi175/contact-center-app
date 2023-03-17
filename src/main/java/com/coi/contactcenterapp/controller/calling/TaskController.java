@@ -1,29 +1,24 @@
 package com.coi.contactcenterapp.controller.calling;
 
-import com.coi.contactcenterapp.domain.dto.auth.JwtAuthentication;
 import com.coi.contactcenterapp.domain.dto.calling.TaskAutoCreationRequest;
 import com.coi.contactcenterapp.domain.dto.calling.Task_DTO;
 import com.coi.contactcenterapp.domain.entity.calling.Contact;
 import com.coi.contactcenterapp.domain.entity.calling.Task;
 import com.coi.contactcenterapp.domain.mapper.calling.TaskMapper;
-import com.coi.contactcenterapp.domain.mapper.info.TaskListMapper;
 import com.coi.contactcenterapp.exception.EntityNotFoundException;
 import com.coi.contactcenterapp.service.calling.ContactService;
 import com.coi.contactcenterapp.service.calling.TaskService;
 import com.coi.contactcenterapp.service.info.ActionLogService;
 import com.coi.contactcenterapp.util.AuthUtils;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +28,6 @@ public class TaskController {
     private final TaskService taskService;
     private final TaskMapper taskMapper;
     private final ContactService contactService;
-    private final TaskListMapper taskListMapper;
     private final ActionLogService actionLogService;
 
     @GetMapping("task/{taskId}")
@@ -49,19 +43,20 @@ public class TaskController {
             managerId = authUtils.getManagerFromAuth().getManagerId();
         }
         return ResponseEntity
-                .ok(taskListMapper
+                .ok(taskMapper
                         .toDTO(taskService.getAllTasksByParams(null, managerId, null, null)));
     }
 
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PostMapping("tasks")
     public ResponseEntity<List<Task_DTO>> getTasksByParams(@RequestBody Task_DTO taskParams) {
-        return ResponseEntity
-                .ok(taskListMapper
+        List<Task_DTO> tmp = taskMapper
                         .toDTO(taskService.getAllTasksByParams(taskParams.getOperatorId(),
-                                taskParams.getManagerId(),
+                                taskParams.getManagerId().equals(-1) ? authUtils.getManagerFromAuth().getManagerId() : taskParams.getManagerId(),
                                 taskParams.getContactId(),
-                                taskParams.getTaskStatus())));
+                                taskParams.getTaskStatus()));
+        return ResponseEntity
+                .ok(tmp);
     }
 
     @PostMapping("operator/{operatorId}/tasks")
@@ -70,7 +65,7 @@ public class TaskController {
             operatorId = authUtils.getOperatorFromAuth().getOperatorId();
         }
         return ResponseEntity
-                .ok(taskListMapper
+                .ok(taskMapper
                         .toDTO(taskService.getAllTasksByParams(operatorId, null, null, taskStatus)));
     }
 
@@ -81,7 +76,7 @@ public class TaskController {
      */
     @PreAuthorize("hasAuthority('MODERATOR')")
     @PostMapping("tasks/manager/create/auto")
-    public ResponseEntity<Integer> autoCreateTasks(@RequestBody List<TaskAutoCreationRequest> taskAutoCreationRequestList) {
+    public ResponseEntity<Integer> autoCreateTasks(@RequestBody @NonNull List<TaskAutoCreationRequest> taskAutoCreationRequestList) {
         actionLogService.log(String.format("Попытка автоматически создать %s задач", taskAutoCreationRequestList.size()), "INFO", authUtils.getEmployeeFromAuth());
         return ResponseEntity.ok(taskService.addAllTasks(
                 taskAutoCreationRequestList.stream()
@@ -92,6 +87,7 @@ public class TaskController {
                                 .contactId(contactService.getEntityById(t.getContactId()).orElse(new Contact()).getContactId())
                                 .build())
                         .filter(t -> t.getContactId() != null)
+                        .peek(System.out::println)
                         .map(taskMapper::toEntity)
                         .toList())
                 .size()
@@ -152,5 +148,11 @@ public class TaskController {
             taskService.deleteTask(taskId);
         }
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('MODERATOR')")
+    @GetMapping("tasks/status")
+    public ResponseEntity<List<String>> getStatus() {
+        return ResponseEntity.ok(taskService.getTaskStatus());
     }
 }

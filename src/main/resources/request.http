@@ -1,15 +1,14 @@
 ### Registration
 POST localhost:8080/api/auth/register
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb2kxNzUiLCJleHAiOjE2Nzg2MDY5NDIsInJvbGUiOiJBRE1JTiJ9.mlPDon71z5XlEu0fW5fYodOfoWZY4rbYVIRzs4I5haeeFpRAt1oPWYZi2j9PftFBm3MZ5JxGgiw8GxCYWfphag
 
 {
-  "username": "coi175",
-  "password": "Coi11042001Gf",
-  "firstName": "Евгений",
-  "lastName": "Фабер",
+  "username": "director1",
+  "password": "director1",
+  "firstName": "Сергеев",
+  "lastName": "Сергей",
   "role": "ADMIN",
-  "email": "coikarp175@gmail.com"
+  "email": "director1@gmail.com"
 }
 
 ### Login first time

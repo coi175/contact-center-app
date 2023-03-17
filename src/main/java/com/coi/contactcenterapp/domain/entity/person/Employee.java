@@ -28,15 +28,15 @@ public class Employee implements BaseEntity {
     @Column(name = "email", nullable = false)
     @NonNull
     private String email;
-    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, optional = false)
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.MERGE, optional = false)
     private User user;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @PrimaryKeyJoinColumn
     private Director director;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @PrimaryKeyJoinColumn
     private Manager manager;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @PrimaryKeyJoinColumn
     private Operator operator;
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

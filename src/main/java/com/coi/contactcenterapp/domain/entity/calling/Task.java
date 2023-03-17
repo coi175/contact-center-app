@@ -14,7 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
-@ToString
 @Entity
 @Table(name="task")
 public class Task implements BaseEntity {
@@ -45,6 +44,5 @@ public class Task implements BaseEntity {
     private Manager manager;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "operator_id")
-    @NonNull
     private Operator operator;
 }

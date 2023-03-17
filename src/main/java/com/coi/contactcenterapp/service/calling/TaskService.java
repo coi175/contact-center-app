@@ -32,8 +32,12 @@ public class TaskService implements BaseService<Task, Long> {
     }
 
     public List<Task> getAllTasksByParams(Integer operatorId, Integer managerId, String contactId, String taskStatus) {
-        return taskRepository.findAllByTasksByParams(operatorId, managerId, contactId, taskStatus);
+        List<Task> res = taskRepository.findAllByTasksByParams(operatorId, managerId, contactId, taskStatus);
+        return res;
     }
 
+    public List<String> getTaskStatus() {
+        return taskRepository.findAllTaskStatus();
+    }
 
 }

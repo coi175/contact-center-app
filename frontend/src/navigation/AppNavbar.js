@@ -2,10 +2,11 @@ import {Link} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import AuthService from "../auth/service/auth.service";
 import TokenService from "../auth/service/token.service";
+import api from "../auth/service/api";
 
 const AppNavbar = () => {
     const [currentUser, setCurrentUser] = useState(undefined);
-
+    const [currentTime, setCurrentTime] = useState("");
 
     useEffect(() => {
         const user = AuthService.getCurrentUser();
@@ -13,7 +14,14 @@ const AppNavbar = () => {
         if (user) {
             setCurrentUser(user);
         }
+        fetchTime();
     }, []);
+
+    const fetchTime = async () => {
+        const result = await api.get('http://localhost:8080/api/time', {})
+            .then(response => response.data);
+        setCurrentTime(result);
+    }
 
     const logOut = () => {
         AuthService.logout();
@@ -22,28 +30,35 @@ const AppNavbar = () => {
     return (
         <nav className="navbar navbar-expand navbar-dark bg-dark">
             <Link to={"/"} className="navbar-brand">
-                Contact-center
+                Контакт-центр
             </Link>
-            <div className="navbar-nav mr-auto">
-
+            <div className={"time pt-1 ml-1 text-white"}>
+                |-->   Время: {currentTime}
             </div>
 
             {currentUser ? (
                 <div className="navbar-nav ml-auto">
                     <li className="nav-item">
                         {TokenService.getRoleFromToken() === "ADMIN" ?
-                            <Link to={"/admin"} className="nav-link">
-                                Панель администратора
+                            <Link to={"/director"} className="nav-link">
+                                Панель директора
                             </Link> : ""
                         }
                         {TokenService.getRoleFromToken() === "MODERATOR" ?
-                            <Link to={"/moderator"} className="nav-link">
-                                Панель модератора
+                            <Link to={"/manager"} className="nav-link">
+                                Панель менеджера
                             </Link> : ""
                         }
                         {TokenService.getRoleFromToken() === "USER" ?
-                            <Link to={"/user"} className="nav-link">
-                                Панель пользователя
+                            <Link to={"/operator"} className="nav-link">
+                                Панель оператора
+                            </Link> : ""
+                        }
+                    </li>
+                    <li className="nav-item">
+                        {TokenService.getRoleFromToken() === "ADMIN" || TokenService.getRoleFromToken() === "MODERATOR" ?
+                            <Link to={"/logs"} className="nav-link">
+                                Логи
                             </Link> : ""
                         }
                     </li>

@@ -26,6 +26,9 @@ public class MapperIdToEntityTaskService {
         return managerRepository.findById(id).orElse(null);
     }
     public Operator mapOperator(Integer id) {
+        if (id == null) {
+            return null;
+        }
         return operatorRepository.findById(id).orElse(null);
     }
 }
