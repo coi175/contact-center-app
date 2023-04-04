@@ -22,7 +22,7 @@ public class RefreshToken implements BaseEntity {
     @Column(name="token", nullable = false)
     @NonNull
     private String token;
-    @Column(name="username", nullable = false)
+    @Column(name="username", nullable = false, unique = true)
     @NonNull
     private String username;
     @Column(name = "date", nullable = false)

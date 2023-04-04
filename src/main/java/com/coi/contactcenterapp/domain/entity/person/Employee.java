@@ -28,7 +28,7 @@ public class Employee implements BaseEntity {
     @Column(name = "email", nullable = false)
     @NonNull
     private String email;
-    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, optional = false)
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.MERGE, optional = false)
     private User user;
     @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn

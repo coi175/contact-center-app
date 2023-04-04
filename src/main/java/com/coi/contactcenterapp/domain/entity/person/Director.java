@@ -15,12 +15,11 @@ import java.util.List;
 @Table(name="director")
 public class Director implements BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="director_id")
     private Integer directorId;
     @OneToOne(mappedBy = "director", cascade = CascadeType.ALL, optional = false)
     @NonNull
     private Employee employee;
-    @OneToMany(mappedBy = "director", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "director", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     private List<Manager> managers;
 }

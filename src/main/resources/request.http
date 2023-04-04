@@ -3,12 +3,20 @@ POST localhost:8080/api/auth/register
 content-type: application/json
 
 {
-  "username": "coi175",
-  "password": "Coi11042001Gf",
-  "firstName": "Евгений",
-  "lastName": "Фабер",
+  "username": "director1",
+  "password": "director1",
+  "firstName": "Сергеев",
+  "lastName": "Сергей",
   "role": "ADMIN",
-  "email": "coikarp175@gmail.com"
+  "email": "director1@gmail.com"
+}
+
+###
+POST http://localhost:8080/api/calls/
+content-type: application/json
+
+{
+  "operatorId": "14"
 }
 
 ### Login first time

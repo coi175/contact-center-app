@@ -8,7 +8,6 @@ import lombok.*;
 @Getter
 @Setter
 @EqualsAndHashCode
-@ToString
 @Entity
 @Table(name="report")
 public class Report implements BaseEntity {

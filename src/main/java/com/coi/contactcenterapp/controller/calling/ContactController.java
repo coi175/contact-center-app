@@ -2,7 +2,6 @@ package com.coi.contactcenterapp.controller.calling;
 
 import com.coi.contactcenterapp.domain.dto.calling.Contact_DTO;
 import com.coi.contactcenterapp.domain.entity.calling.Contact;
-import com.coi.contactcenterapp.domain.mapper.calling.ContactListMapper;
 import com.coi.contactcenterapp.domain.mapper.calling.ContactMapper;
 import com.coi.contactcenterapp.exception.EntityNotFoundException;
 import com.coi.contactcenterapp.service.calling.ContactService;
@@ -21,10 +20,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api/")
 public class ContactController {
     private final AuthUtils authUtils;
     private final ContactMapper contactMapper;
-    private final ContactListMapper contactListMapper;
     private final ContactService contactService;
     private final ActionLogService actionLogService;
 
@@ -34,13 +33,22 @@ public class ContactController {
         return ResponseEntity.ok(contactMapper.toDTO(contact));
     }
     @PreAuthorize("hasAuthority('MODERATOR')")
-    @PostMapping("manager/contacts")
+    @GetMapping("manager/contacts")
     public ResponseEntity<List<Contact_DTO>> getContactsToManager() {
-        return ResponseEntity.ok(contactListMapper.toDTO(contactService.getAllContacts()));
+        List<Contact> contacts = contactService.getAllContacts();
+        contacts = contacts.stream()
+                .filter(c -> c.getTaskList()
+                                .stream()
+                                .filter(t -> t.getTaskStatus().equals("NEW") || t.getTaskStatus().equals("ACTIVE"))
+                                .toList()
+                        .size() == 0)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(contactMapper.toDTO(contacts));
     }
 
     @PreAuthorize("hasAuthority('MODERATOR')")
-    @PostMapping("/contacts/manager/crm/receive")
+    @PostMapping("contacts/manager/crm/receive")
     public ResponseEntity<?> receiveContactsFromCRM() {
         actionLogService.log("Попытка получить контакты из CRM", "INFO", authUtils.getEmployeeFromAuth());
         Map<String, Contact> contactsFromDatabase = contactService.getAllContacts().stream().collect(Collectors.toMap(Contact::getContactId, contact -> contact));
@@ -58,11 +66,11 @@ public class ContactController {
         return ResponseEntity.ok(contactListToAdd);
     }
     @PreAuthorize("hasAuthority('MODERATOR')")
-    @PutMapping("/contacts/manager/crm/push")
+    @PostMapping("/contacts/manager/crm/push")
     public ResponseEntity<?> pushContactsToCRM() {
         actionLogService.log("Попытка отправить контакты в CRM", "INFO", authUtils.getEmployeeFromAuth());
         List<Contact> contacts = contactService.getAllContacts();
-        List<Contact_DTO> contactDTOs = contactListMapper.toDTO(contacts);
+        List<Contact_DTO> contactDTOs = contactMapper.toDTO(contacts);
         // push to CRM
         actionLogService.log("Данные отправлены в CRM", "INFO", authUtils.getEmployeeFromAuth());
         return ResponseEntity.ok(contactDTOs);

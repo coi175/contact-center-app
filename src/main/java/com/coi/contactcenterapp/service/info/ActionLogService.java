@@ -31,6 +31,10 @@ public class ActionLogService implements BaseService<ActionLog, Long> {
         actionLogRepository.save(actionLog);
     }
 
+    public List<ActionLog> getAllLogs() {
+        return actionLogRepository.findAll();
+    }
+
     public List<ActionLog> getActionLogByEmployeeId(Integer employeeId) {
         return actionLogRepository.findAllByEmployeeEmployeeId(employeeId);
     }

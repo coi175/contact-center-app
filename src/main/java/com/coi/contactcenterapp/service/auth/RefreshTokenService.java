@@ -25,4 +25,15 @@ public class RefreshTokenService implements BaseService<RefreshToken, Integer> {
     public Optional<RefreshToken> getEntityById(Integer id) {
         return repository.findById(id);
     }
+
+    public RefreshToken deleteByUsername(String username) {
+        return repository.deleteAllByUsername(username);
+    }
+
+    public void delete(RefreshToken token) {
+        repository.delete(token);
+    }
+    public Optional<RefreshToken> getTokenByToken(String token) {
+        return repository.findRefreshTokenByToken(token);
+    }
 }

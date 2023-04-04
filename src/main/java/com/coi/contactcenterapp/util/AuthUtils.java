@@ -47,7 +47,7 @@ public class AuthUtils {
         return employee;
     }
 
-    private User getUserFromAuth() {
+    public User getUserFromAuth() {
         if (AuthUtils.user != null && getAuthUsername().equals(AuthUtils.user.getUsername())) {
             return AuthUtils.user;
         } else {

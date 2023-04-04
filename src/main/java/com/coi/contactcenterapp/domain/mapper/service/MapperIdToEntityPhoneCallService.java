@@ -9,6 +9,9 @@ import com.coi.contactcenterapp.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for mapper which map ids from PhoneCall_DTO to Entities from PhoneCall
+ */
 @RequiredArgsConstructor
 @Service
 public class MapperIdToEntityPhoneCallService {

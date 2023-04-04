@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @EqualsAndHashCode
-@ToString
 @Entity
 @Table(name="phone_call")
 public class PhoneCall implements BaseEntity {

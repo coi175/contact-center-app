@@ -10,12 +10,10 @@ import lombok.*;
 @NoArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode
-@ToString
 @Entity
 @Table(name="user_data")
 public class User implements BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
     private Integer userId;
     @Column(name="username", unique = true, nullable = false)
@@ -28,8 +26,7 @@ public class User implements BaseEntity {
     @JoinColumn(name = "role")
     @NonNull
     private Role role;
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, optional = false)
     @PrimaryKeyJoinColumn
-    @ToString.Exclude
     private Employee employee;
 }

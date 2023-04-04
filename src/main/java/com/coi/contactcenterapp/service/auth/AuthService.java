@@ -10,6 +10,10 @@ import com.coi.contactcenterapp.domain.entity.person.*;
 import com.coi.contactcenterapp.exception.AuthException;
 import com.coi.contactcenterapp.exception.EntityNotFoundException;
 import com.coi.contactcenterapp.exception.RegisterException;
+import com.coi.contactcenterapp.service.person.DirectorService;
+import com.coi.contactcenterapp.service.person.EmployeeService;
+import com.coi.contactcenterapp.service.person.ManagerService;
+import com.coi.contactcenterapp.service.person.OperatorService;
 import com.coi.contactcenterapp.util.AuthUtils;
 import io.jsonwebtoken.Claims;
 import lombok.NonNull;
@@ -31,7 +35,11 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final AuthUtils authUtils;
     private final RoleService roleService;
+    private final DirectorService directorService;
+    private final OperatorService operatorService;
+    private final ManagerService managerService;
 
+    private final EmployeeService employeeService;
     private final PasswordEncoder passwordEncoder;
 
     public void register(@NonNull RegisterRequest registerRequest) {
@@ -46,24 +54,35 @@ public class AuthService {
         user = new User(registerRequest.getUsername(), passwordEncoder.encode(registerRequest.getPassword()), role);
         // create employee
         Employee employee = new Employee(registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getEmail());
+        Employee savedEmployee = employeeService.add(employee);
+
         // create employee by role
         switch (role.getRoleId()) {
             case "ADMIN"  -> {
                 Director director = new Director();
-                employee.setDirector(director);
+                director.setDirectorId(savedEmployee.getEmployeeId());
+                directorService.save(director);
             }
             case "MODERATOR" -> {
                 Manager manager = new Manager();
                 manager.setDirector(authUtils.getDirectorFromAuth());
-                employee.setManager(manager);
+                authUtils.getDirectorFromAuth().getManagers().add(manager);
+                manager.setManagerId(savedEmployee.getEmployeeId());
+                manager.setEmployee(employee);
+                managerService.save(manager);
+
             }
             case "USER" -> {
                 Operator operator = new Operator();
                 operator.setManager(authUtils.getManagerFromAuth());
-                employee.setOperator(operator);
+                authUtils.getManagerFromAuth().getOperators().add(operator);
+                operator.setOperatorId(savedEmployee.getEmployeeId());
+                operator.setEmployee(employee);
+                operatorService.save(operator);
             }
         }
-        user.setEmployee(employee);
+        user.setEmployee(savedEmployee);
+        user.setUserId(savedEmployee.getEmployeeId());
         userService.addUser(user);
     }
 
@@ -74,9 +93,11 @@ public class AuthService {
         if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
             final String refreshToken = jwtProvider.generateRefreshToken(user);
-            RefreshToken refreshTokenEntity = new RefreshToken(refreshToken, user.getUsername(),  LocalDateTime.now());
+            RefreshToken refreshTokenEntity = refreshTokenService.getByUsername(user.getUsername()).orElse(new RefreshToken(refreshToken, user.getUsername(), LocalDateTime.now()));
+            refreshTokenEntity.setToken(refreshToken);
+            refreshTokenEntity.setDateTime(LocalDateTime.now());
             refreshTokenService.addEntity(refreshTokenEntity);
-            return new JwtResponse(accessToken, refreshToken);
+            return new JwtResponse(accessToken, refreshToken, user.getRole().getRoleId());
         } else {
             throw new AuthException("Неправильный пароль");
         }
@@ -91,10 +112,10 @@ public class AuthService {
                 final User user = userService.getByUsername(username)
                         .orElseThrow(() -> new AuthException("Пользователь не найден"));
                 final String accessToken = jwtProvider.generateAccessToken(user);
-                return new JwtResponse(accessToken, null);
+                return new JwtResponse(accessToken, null, user.getRole().getRoleId());
             }
         }
-        return new JwtResponse(null, null);
+        return new JwtResponse(null, null, null);
     }
 
     public JwtResponse refresh(@NonNull String refreshToken) {
@@ -105,11 +126,15 @@ public class AuthService {
             if (saveRefreshToken != null && saveRefreshToken.getToken().equals(refreshToken)) {
                 final User user = userService.getByUsername(username)
                         .orElseThrow(() -> new AuthException("Пользователь не найден"));
+                refreshTokenService.delete(saveRefreshToken);
                 final String accessToken = jwtProvider.generateAccessToken(user);
                 final String newRefreshToken = jwtProvider.generateRefreshToken(user);
-                RefreshToken refreshTokenEntity = new RefreshToken(refreshToken, username,  LocalDateTime.now());
-                refreshTokenService.addEntity(refreshTokenEntity);
-                return new JwtResponse(accessToken, newRefreshToken);
+                // update refresh token in storage
+                saveRefreshToken.setToken(newRefreshToken);
+                saveRefreshToken.setDateTime(LocalDateTime.now());
+                refreshTokenService.addEntity(saveRefreshToken);
+
+                return new JwtResponse(accessToken, newRefreshToken, user.getRole().getRoleId());
             }
         }
         throw new AuthException("Невалидный JWT токен");

@@ -9,6 +9,9 @@ import com.coi.contactcenterapp.repository.OperatorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for mapper which map ids from Task_DTO to Entities from Task
+ */
 @RequiredArgsConstructor
 @Service
 public class MapperIdToEntityTaskService {
@@ -17,12 +20,21 @@ public class MapperIdToEntityTaskService {
     private final OperatorRepository operatorRepository;
 
     public Contact mapContact(String id) {
+        if (id == null) {
+            return null;
+        }
         return contactRepository.findById(id).orElse(null);
     }
     public Manager mapManager(Integer id) {
+        if (id == null) {
+            return null;
+        }
         return managerRepository.findById(id).orElse(null);
     }
     public Operator mapOperator(Integer id) {
+        if (id == null) {
+            return null;
+        }
         return operatorRepository.findById(id).orElse(null);
     }
 }

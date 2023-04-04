@@ -19,5 +19,5 @@ jwt:
   secret:
     access: fjkfqjfdkJHFjEJFKefejfsdljGIJJLSGafjgyghfjNsfjN141R851975fhsaF252395Yf27562F525UYF255FS4
     refresh: JHWJDHHHajhdhfgjkhfHjafgAh1841hfjh34518fhfEWGT89f8fgWEYUTLyqfHfgdwgghgha17YJFlH2Fhg2YK
-    accessTimeToExpInMinutes: 100
+    accessTimeToExpInMinutes: 5
     refreshTimeExpInDays: 30
