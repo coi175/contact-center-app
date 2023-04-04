@@ -66,14 +66,18 @@ public class AuthService {
             case "MODERATOR" -> {
                 Manager manager = new Manager();
                 manager.setDirector(authUtils.getDirectorFromAuth());
+                authUtils.getDirectorFromAuth().getManagers().add(manager);
                 manager.setManagerId(savedEmployee.getEmployeeId());
+                manager.setEmployee(employee);
                 managerService.save(manager);
 
             }
             case "USER" -> {
                 Operator operator = new Operator();
                 operator.setManager(authUtils.getManagerFromAuth());
+                authUtils.getManagerFromAuth().getOperators().add(operator);
                 operator.setOperatorId(savedEmployee.getEmployeeId());
+                operator.setEmployee(employee);
                 operatorService.save(operator);
             }
         }

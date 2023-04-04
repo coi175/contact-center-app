@@ -68,6 +68,7 @@
 .list-line {
     border-bottom: 1px solid white;
     border-top: 1px solid white;
+    min-height: 80px;
 }
 
 .list-line-header {

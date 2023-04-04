@@ -64,7 +64,7 @@ const OperatorMainTab = (operatorId) => {
                 setTaskInfo(response.data);
                 console.log(response.data);
                 getContactInfo(response.data.contactId);
-                updatePhoneCallList(response.data.taskId);
+                getPhoneCallList(response.data.taskId);
                 return response.data;
             }, (error) => {
                 setTheTask(false);
@@ -81,6 +81,7 @@ const OperatorMainTab = (operatorId) => {
             });
     }
     const getPhoneCallList = (taskId) => {
+        console.log(taskId);
         return api.post("http://localhost:8080/api/calls", {taskId: taskId})
             .then((response) => {
                 setPhoneCallList(response.data);
