@@ -13,6 +13,7 @@ public interface PhoneCallMapper {
     @Mapping(source = "contact.contactId", target = "contactId")
     @Mapping(source = "task.taskId", target = "taskId")
     @Mapping(source = "operator.operatorId", target = "operatorId")
+    @Mapping(source = "contact.phoneNumber", target = "phoneNumber")
     PhoneCall_DTO toDTO(PhoneCall phoneCall);
     @Mapping(source = "contactId", target = "contact")
     @Mapping(source = "taskId", target = "task")

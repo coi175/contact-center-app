@@ -23,7 +23,7 @@ public class Manager implements BaseEntity {
     @ManyToOne
     @JoinColumn(name = "director_id")
     private Director director;
-    @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<Operator> operators;
     @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Task> taskList;

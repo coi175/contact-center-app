@@ -20,9 +20,15 @@ public class MapperIdToEntityTaskService {
     private final OperatorRepository operatorRepository;
 
     public Contact mapContact(String id) {
+        if (id == null) {
+            return null;
+        }
         return contactRepository.findById(id).orElse(null);
     }
     public Manager mapManager(Integer id) {
+        if (id == null) {
+            return null;
+        }
         return managerRepository.findById(id).orElse(null);
     }
     public Operator mapOperator(Integer id) {

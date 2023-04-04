@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
+    import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -24,4 +26,20 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             SELECT DISTINCT(c.taskStatus) FROM Task c
             """)
     List<String> findAllTaskStatus();
+
+
+    @Query("""
+            SELECT c FROM Task c WHERE (c.operator.operatorId = :operatorId)
+            AND (c.taskStatus = 'SUCCESS')
+            AND (c.endDate >= :date1 AND c.endDate <= :date2)
+            """)
+    List<Task> findAllSuccessTasksByDateAndOperator(@Param("operatorId") Integer operatorId, @Param("date1") LocalDateTime date1, @Param("date2") LocalDateTime date2);
+
+    @Query("""
+            SELECT c FROM Task c WHERE (c.operator.operatorId = :operatorId)
+            AND (c.taskStatus <> 'SUCCESS')
+            AND (c.endDate >= :date1 AND c.endDate <= :date2)
+            """)
+    List<Task> findAllOtherTasksByDateAndOperator(@Param("operatorId") Integer operatorId, @Param("date1") LocalDateTime date1, @Param("date2") LocalDateTime date2);
+
 }

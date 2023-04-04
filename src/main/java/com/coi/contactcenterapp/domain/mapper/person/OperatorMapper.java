@@ -2,13 +2,14 @@ package com.coi.contactcenterapp.domain.mapper.person;
 
 import com.coi.contactcenterapp.domain.dto.person.Operator_DTO;
 import com.coi.contactcenterapp.domain.entity.person.Operator;
+import com.coi.contactcenterapp.domain.mapper.service.MapperIdToEntityEmployeeService;
 import com.coi.contactcenterapp.domain.mapper.service.MapperIdToEntityTaskService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = { MapperIdToEntityTaskService.class })
+@Mapper(componentModel = "spring", uses = { MapperIdToEntityEmployeeService.class })
 public interface OperatorMapper {
     @Mapping(source = "employee.firstName", target = "firstName")
     @Mapping(source = "employee.lastName", target = "lastName")

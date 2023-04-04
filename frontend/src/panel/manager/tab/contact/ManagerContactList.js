@@ -2,14 +2,23 @@
 import {useEffect, useState} from "react";
 import managerService from "../../manager.service";
 import {Button, ButtonGroup, Container, Table} from "reactstrap";
+import {useNavigate} from "react-router-dom";
 
 const ManagerContactList = () => {
     const [contacts, setContacts] = useState([]);
+    let navigate = useNavigate();
 
     useEffect(() => {
         updateContacts();
 
     }, [])
+
+    const openContactPage = (event) => {
+        let item = event.currentTarget;
+        let parent = item.parentElement.parentElement;
+        let contactId = parent.children.item(0).getElementsByClassName("contactId").item(0).textContent;
+        navigate("/manager/contact/" + contactId, { state: { contactId: contactId } });
+    }
 
     const updateContacts = () => {
         const fetchData = async () => {
@@ -48,7 +57,7 @@ const ManagerContactList = () => {
 
     const contactList = contacts.map(contact => {
         return (
-            <div className="row">
+            <div className="row contact-line">
                 <div className="col-11">
                     <div onClick = {mark} className="row list-line bg-dark justify-content-start">
                         <div className="col contactId list-line-item d-none">
@@ -72,7 +81,7 @@ const ManagerContactList = () => {
                     </div>
                 </div>
                 <div className="col-1 d-flex align-content-center">
-                    <button className="btn list-line-item-button">
+                    <button onClick={openContactPage} className="btn list-line-item-button">
                         <span>-></span>
                     </button>
                 </div>

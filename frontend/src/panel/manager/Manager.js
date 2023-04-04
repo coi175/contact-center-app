@@ -5,6 +5,8 @@ import "../../Custom.css";
 import ManagerContactList from "./tab/contact/ManagerContactList";
 import ManagerTaskList from "./tab/task/ManagerTaskList";
 import ManagerOperatorList from "./tab/operator/ManagerOperatorList";
+import CommonService from "../common/common.service";
+import ManagerReport from "./tab/report/ManagerReport";
 
 const Manager = () => {
     let navigate = useNavigate();
@@ -12,7 +14,18 @@ const Manager = () => {
     const checkBtn = useRef();
     //const {state} = useLocation();
     //const { id, color } = state; // Read values passed on state
-    const [showingPanel, setShowingPanel] = useState("");
+    const [showingPanel, setShowingPanel] = useState("contacts-btn");
+        const [manager, setManager] = useState({});
+
+    useEffect(() => {
+        getManager();
+    },[])
+
+    const getManager = async () => {
+        let manager = await CommonService.getEmployeeId();
+        setManager(manager);
+        console.log(manager);
+    }
 
     const setActive = (event) => {
         let button = event.currentTarget;
@@ -56,13 +69,13 @@ const Manager = () => {
                         <ManagerContactList/> : null
                     }
                     {showingPanel === "tasks-btn" ?
-                       <ManagerTaskList/> : null
+                       <ManagerTaskList manager = {manager}/> : null
                     }
                     {showingPanel === "operators-btn" ?
                         <ManagerOperatorList/> : null
                     }
-                    {//showingPanel === "report-btn" ?
-                       // <ManagerReport/> : null
+                    {showingPanel === "report-btn" ?
+                        <ManagerReport managerId = {manager.managerId}/> : null
                     }
                 </div>
             </div>

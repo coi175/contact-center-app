@@ -19,6 +19,8 @@ public class Task_DTO {
     @JsonFormat(pattern="dd.MM.YY - hh:mm:ss")
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalDateTime startDate;
+    @JsonFormat(pattern="dd.MM.YY - hh:mm:ss")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalDateTime endDate;
     private String contactId;
     private String phoneNumber;

@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authz -> authz
                                 .requestMatchers("/api/auth/login", "/api/auth/token", "/api/auth/register").permitAll()
-                                .anyRequest().permitAll()//authenticated()
+                                .anyRequest().permitAll()//.authenticated()
                                 //.and()
                                 //.addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 ).build();

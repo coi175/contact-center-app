@@ -2,14 +2,16 @@ import {useEffect, useState} from "react";
 import managerService from "../../manager.service";
 import {Button, ButtonGroup, Container, Table} from "reactstrap";
 import Select from "react-select";
+import {useNavigate} from "react-router-dom";
 
 
-const ManagerTaskList = () => {
+const ManagerTaskList = ({manager}) => {
     const [tasks, setTasks] = useState([]);
     const [statusList, setStatusList] = useState([]);
     const [operatorList, setOperatorList] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState([]);
     const [selectedOperator, setSelectedOperator] = useState([]);
+    let navigate = useNavigate();
 
 
     useEffect(() => {
@@ -19,9 +21,15 @@ const ManagerTaskList = () => {
     }, [])
 
 
+    const openTaskPage = (event) => {
+        let item = event.currentTarget;
+        let taskId = item.children.item(0).getElementsByClassName("taskId").item(0).textContent;
+        navigate("/manager/task/" + taskId, { state: { taskId: taskId } });
+    }
+
     const fetchTasks = async (operatorStatus, taskStatus) => {
         const result = await managerService.getTasks({operatorId: operatorStatus !== undefined ? operatorStatus : selectedOperator?.value,
-            taskStatus: taskStatus !== undefined ? taskStatus : selectedStatus?.value, managerId: -1});
+            taskStatus: taskStatus !== undefined ? taskStatus : selectedStatus?.value, managerId: manager.managerId});
         setTasks(result);
     };
     const fetchOperators = async () => {
@@ -30,7 +38,8 @@ const ManagerTaskList = () => {
         for (let item of result) {
             map.push({value: item.operatorId, label: item.firstName + " " + item.lastName});
         }
-            setOperatorList(map);
+        map.push({value: null, label: "без фильтра"});
+        setOperatorList(map);
     };
     const fetchStatus = async () => {
         const result = await managerService.getTaskStatus();
@@ -38,6 +47,7 @@ const ManagerTaskList = () => {
         for (let item of result) {
             map.push({value: item, label: item});
         }
+        map.push({value: null, label: "без фильтра"});
         setStatusList(map);
     };
 
@@ -51,22 +61,22 @@ const ManagerTaskList = () => {
 
     const handleSelectOperator = (data) => {
         setSelectedOperator(data);
-        fetchTasks(undefined, data?.value);
+        fetchTasks(data?.value, undefined);
     }
 
 
     const taskList = tasks.map(task => {
         return (
-            <div className="row">
+            <div className="row" onClick={openTaskPage}>
                 <div className="col">
                     <div className="row list-line bg-dark justify-content-start">
-                        <div className="col contactId list-line-item d-none">
+                        <div className="col taskId list-line-item d-none">
                             {task.taskId}
                         </div>
                         <div className="col-2 list-line-item">
                             {task.phoneNumber}
                         </div>
-                        <div className="col-3 list-line-item">
+                        <div className="col-3 scrollable list-line-item">
                             {task.taskDescription}
                         </div>
                         <div className="col-1 list-line-item">
@@ -79,8 +89,9 @@ const ManagerTaskList = () => {
                             {task.endDate}
                         </div>
                         <div className="col-2 list-line-item">
-                            {task.operatorFirstName !== null ? task.operatorFirstName : "" + " "
-                                +  task.operatorLastName !== null ? task.operatorLastName : ""}
+                            {task.operatorFirstName !== null ? task.operatorFirstName + "  " : ""}
+
+                            {task.operatorLastName !== null ? task.operatorLastName : ""}
                         </div>
                     </div>
                 </div>

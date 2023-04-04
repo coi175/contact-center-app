@@ -20,6 +20,6 @@ public class Director implements BaseEntity {
     @OneToOne(mappedBy = "director", cascade = CascadeType.ALL, optional = false)
     @NonNull
     private Employee employee;
-    @OneToMany(mappedBy = "director", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @OneToMany(mappedBy = "director", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     private List<Manager> managers;
 }

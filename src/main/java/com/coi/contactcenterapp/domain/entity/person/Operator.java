@@ -25,7 +25,7 @@ public class Operator implements BaseEntity {
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "manager_id")
     private Manager manager;
-    @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @OneToMany(mappedBy = "operator", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Task> taskList;
     @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     private List<PhoneCall> phoneCallList;

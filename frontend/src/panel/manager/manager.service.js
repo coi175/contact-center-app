@@ -36,9 +36,21 @@ const getTasks = (request) => {
         .then((response => response.data));
 };
 
+const getTasksToOperator = (request) => {
+    return api
+        .post(API_URL + "operator/tasks", request)
+        .then((response => response.data));
+};
+
 const getOperators = () => {
     return api
         .get(API_URL + "manager/operators", {})
+        .then((response => response.data));
+};
+
+const getManagersByDirector = () => {
+    return api
+        .get(API_URL + "director/managers", {})
         .then((response => response.data));
 };
 
@@ -66,7 +78,9 @@ const ManagerService = {
     createTasksFromContacts,
     getTaskStatus,
     getTasks,
-    getOperators
+    getOperators,
+    getManagersByDirector,
+    getTasksToOperator
 };
 
 export default ManagerService;
