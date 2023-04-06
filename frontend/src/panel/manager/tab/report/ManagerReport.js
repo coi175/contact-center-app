@@ -78,7 +78,7 @@ const ManagerReport = (managerId) => {
             fTaskList.push(report.otherTasks);
             fCallList.push(report.otherCalls);
         }
-        setEffective(sum / i);
+        setEffective(sum / i / data[0]?.operatorCount);
         setTasks(taskList);
         setCalls(callList);
         setDurations(durationList);
